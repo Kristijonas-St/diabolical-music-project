@@ -1,0 +1,20 @@
+{
+    "C_major": {
+        "I": "C",
+        "II": "Dm",
+        "III": "Em",
+        "IV": "F",
+        "V": "G",
+        "VI": "Am",
+        "VII": "Bdim"
+    },
+    "A_minor": {
+        "I": "Am",
+        "II": "Bdim",
+        "III": "C",
+        "IV": "Dm",
+        "V": "Em",
+        "VI": "F",
+        "VII": "G"
+    }
+}
