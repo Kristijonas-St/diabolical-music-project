@@ -46,7 +46,7 @@ def convert_numbers_to_chords(five_chords, temp_chord_list, key):
     for chord in five_chords:
         temp_chord_list.append(keys.get(key, {}).get(str(chord)))
 
-# Load JSON data at import time
+
 read_keys_json(keys_json_path)
 read_numbers_json(numbers_json_path)
 read_chords_json(chords_json_path)
