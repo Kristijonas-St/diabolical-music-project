@@ -3,13 +3,16 @@ import json
 import os
 from mido import Message, MidiFile, MidiTrack
 
-midi_middle_mappins_path = os.path.join('jsons_dir', 'midi_middle_mappings.json')
+midi_middle_mappings_path = os.path.join('jsons_dir', 'midi_middle_mappings.json')
+
 def read_midi_middle_mappings():
-    with open(midi_middle_mappins_path, 'r') as file:
+    with open(midi_middle_mappings_path, 'r') as file:
         return json.load(file)
 
 
 def generate_mid_file(generated_progression, filename):
+    generated_mid_files_path = os.path.expanduser(f'~/Desktop/generated_five_chords/{filename}')
+    
     mid = MidiFile()
     track = MidiTrack()
     mid.tracks.append(track)
@@ -22,7 +25,7 @@ def generate_mid_file(generated_progression, filename):
             track.append(Message('note_on', note=note, velocity = 64, time = 0)) 
         for note in chord:
             track.append(Message('note_off', note=note, velocity = 64, time = 500))
-    mid.save(filename)
+    mid.save(generated_mid_files_path)
     
 def convert_chords_to_midi(generated_progression, mid, track, midi_mappings):
     chords_in_midi = []
