@@ -1,16 +1,19 @@
 import mido
 import json
 import os
+import random
 from mido import Message, MidiFile, MidiTrack
 
-midi_middle_mappings_path = os.path.join('jsons_dir', 'midi_middle_mappings.json')
+MIDI_MIDDLE_MAPPINGS_PATH = os.path.join('jsons_dir', 'midi_middle_mappings.json')
 
 def read_midi_middle_mappings():
-    with open(midi_middle_mappings_path, 'r') as file:
+    with open(MIDI_MIDDLE_MAPPINGS_PATH, 'r') as file:
         return json.load(file)
 
 
 def generate_mid_file(generated_progression, filename):
+    
+    filename = filename + f"_in_{generated_progression.key.upper()}" + "_" + (str)(random.randint(1, 20)) + ".mid"
     generated_mid_files_path = os.path.expanduser(f'~/Desktop/generated_five_chords/{filename}')
     
     mid = MidiFile()
@@ -18,7 +21,7 @@ def generate_mid_file(generated_progression, filename):
     mid.tracks.append(track)
     
     midi_mappings = read_midi_middle_mappings()
-    chords_in_midi = convert_chords_to_midi(generated_progression, mid, track, midi_mappings)
+    chords_in_midi = convert_chords_to_midi(generated_progression, midi_mappings)
 
     for chord in chords_in_midi:
         for note in chord:
@@ -27,9 +30,9 @@ def generate_mid_file(generated_progression, filename):
             track.append(Message('note_off', note=note, velocity = 64, time = 500))
     mid.save(generated_mid_files_path)
     
-def convert_chords_to_midi(generated_progression, mid, track, midi_mappings):
+def convert_chords_to_midi(generated_progression, midi_mappings):
     chords_in_midi = []
-    for chord in generated_progression:
+    for chord in generated_progression.note_sets:
         chord_notes = []
         for note in chord:
             chord_notes.append(midi_mappings.get(note.__str__()))

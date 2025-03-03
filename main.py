@@ -1,17 +1,18 @@
 import json
-import random
-from chord_progression_generator_dir.chord_progression_generator import get_note_sets
+from chord_progression_generator_dir.chord_progression_generator import get_generated_progression
 from chord_progression_generator_dir.mid_file_generator import generate_mid_file
 
-key = "C_major"
 feature = "chord generator"
-filename = "five-chord_" + key.upper()
+
+key = "C_major"
+length = 5
+filename = "test-chord-prog"
 
 def main():
     match feature:
         case "chord generator":
-            generated_progression = get_note_sets(key)
-            generate_mid_file(generated_progression, filename + "_" + (str)(random.randint(1, 20)) + (str)(random.randint(1, 20)) + ".mid")
+            generated_progression = get_generated_progression(7, key)
+            generate_mid_file(generated_progression, filename)
         case "piano chord trainer":
             print("Piano chord trainer NOT YET developed")
         case "tuner":

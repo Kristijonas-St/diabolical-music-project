@@ -2,51 +2,48 @@ import json
 import os
 import random
 
-keys_json_path = os.path.join('jsons_dir', 'keys.json')
-numbers_json_path = os.path.join('jsons_dir', 'numbers.json')  
-chords_json_path = os.path.join('jsons_dir', 'chords.json')
+class Progression:
+    chords = set()
+    note_sets = []
 
-
-def read_keys_json(filepath):
-    with open(filepath, 'r') as file:
-        global keys
-        keys = json.load(file)
-
-def read_numbers_json(file_path):
-    with open(file_path, 'r') as file:
-        global numbers
-        numbers = json.load(file)
-
-def read_chords_json(filepath):
-    with open(filepath, 'r') as file:
-        global chords
-        chords = json.load(file)
-
-
-
-def get_note_sets(key):
-    five_chords = set()
-    five_chord_generator(five_chords)
-    print(five_chords)
-
-def five_chord_generator(five_chords):
-    while five_chords.__len__() != 5:
-        five_chords.add(numbers.get(str(random.randint(1, 7))))
+    def __init__(self, length, key):
+        self.length = length
+        self.key = key
     
-def form_note_sets(five_chords, notes, key):
+
+KEYS_JSON_PATH = os.path.join('jsons_dir', 'keys.json')
+NUMBERS_JSON_PATH = os.path.join('jsons_dir', 'numbers.json')  
+CHORDS_JSON_PATH = os.path.join('jsons_dir', 'chords.json')
+
+def read_json(filepath):
+    with open(filepath, 'r') as file:
+        return json.load(file)
+
+keys = read_json(KEYS_JSON_PATH)
+numbers = read_json(NUMBERS_JSON_PATH)
+chords = read_json(CHORDS_JSON_PATH)
+
+
+def get_generated_progression(length, key):
+    test = Progression(length, key)
+    generate_chord_progression(test)
+    return test
+
+
+def generate_chord_progression(prog):
+    while prog.chords.__len__() != prog.length:
+       prog.chords.add(numbers.get(str(random.randint(1, 7))))
+    form_note_sets(prog)
+    
+def form_note_sets(prog):
     temp_chord_list = []
-    convert_numbers_to_chords(five_chords, temp_chord_list, key)
+    convert_numbers_to_chords(prog, temp_chord_list)
     for chord in temp_chord_list:
         chord_notes = chords.get(str(chord))
         if chord_notes:
-            notes.append(set(chord_notes.values()))
-    return notes 
-
-def convert_numbers_to_chords(five_chords, temp_chord_list, key):
-    for chord in five_chords:
-        temp_chord_list.append(keys.get(key, {}).get(str(chord)))
+            prog.note_sets.append(set(chord_notes.values()))
 
 
-read_keys_json(keys_json_path)
-read_numbers_json(numbers_json_path)
-read_chords_json(chords_json_path)
+def convert_numbers_to_chords(prog, temp_chord_list):
+    for chord in prog.chords:
+        temp_chord_list.append(keys.get(prog.key, {}).get(str(chord)))
