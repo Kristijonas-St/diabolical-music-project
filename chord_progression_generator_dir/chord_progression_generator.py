@@ -24,15 +24,15 @@ def read_chords_json(filepath):
 
 
 
-
-def five_chord_generator():
-    return [numbers.get(str(random.randint(1, 7))) for _ in range(5)]
-
 def get_note_sets(key):
-    five_chords = five_chord_generator()
-    notes = []
-    return form_note_sets(five_chords, notes, key)
+    five_chords = set()
+    five_chord_generator(five_chords)
+    print(five_chords)
 
+def five_chord_generator(five_chords):
+    while five_chords.__len__() != 5:
+        five_chords.add(numbers.get(str(random.randint(1, 7))))
+    
 def form_note_sets(five_chords, notes, key):
     temp_chord_list = []
     convert_numbers_to_chords(five_chords, temp_chord_list, key)
