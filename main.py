@@ -1,5 +1,5 @@
 import json
-from chord_progression_generator_dir.chord_progression_generator import get_generated_progression
+from chord_progression_generator_dir.chord_progression_generator import Progression
 from chord_progression_generator_dir.mid_file_generator import generate_mid_file
 
 feature = "chord generator"
@@ -11,8 +11,8 @@ filename = "test-chord-prog"
 def main():
     match feature:
         case "chord generator":
-            generated_progression = get_generated_progression(7, key)
-            generate_mid_file(generated_progression, filename)
+            test = Progression(length, key)
+            generate_mid_file(test, filename)
         case "piano chord trainer":
             print("Piano chord trainer NOT YET developed")
         case "tuner":
