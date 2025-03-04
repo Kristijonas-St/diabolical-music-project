@@ -4,9 +4,9 @@ from chord_progression_generator_dir.mid_file_generator import generate_mid_file
 
 feature = "chord generator"
 
-key = "C_major"
+key = "G_major"
 length = 5
-filename = "test-chord-prog"
+filename = "test-"
 
 def main():
     match feature:

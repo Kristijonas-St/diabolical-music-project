@@ -16,5 +16,23 @@
         "V": "Em",
         "VI": "F",
         "VII": "G"
+    },
+    "G_major": {
+        "I": "G",
+        "II": "Am",
+        "III": "Bm",
+        "IV": "C",
+        "V": "D",
+        "VI": "Em",
+        "VII": "F#dim"
+    },
+    "E_minor": {
+        "I": "Em",
+        "II": "F#dim",
+        "III": "G",
+        "IV": "Am",
+        "V": "Bm",
+        "VI": "C",
+        "VII": "D"
     }
 }
