@@ -11,8 +11,9 @@ filename = "test-"
 def main():
     match feature:
         case "chord generator":
-            test = Progression(length, key)
-            generate_mid_file(test, filename)
+            progression = Progression(length, key)
+            print(progression.chords)
+            generate_mid_file(progression, filename)
         case "piano chord trainer":
             print("Piano chord trainer NOT YET developed")
         case "tuner":
