@@ -1,47 +1,63 @@
 import customtkinter
 from PIL import Image
-
 import sys
-sys.path.append('./') 
+
+sys.path.append('./')
 from main import generate_chord_progression, use_piano_trainer, use_tuner
 
-customtkinter.set_appearance_mode("System")
-customtkinter.set_default_color_theme("dark-blue")
+class MainPage(customtkinter.CTk):
+    def __init__(self):
+        super().__init__()
 
-root = customtkinter.CTk()
-root.geometry("750x500")
+        self.title("Diabolical Music Project")
+        self.geometry("750x500")
 
-frame = customtkinter.CTkFrame(master=root, fg_color="transparent")
-frame.pack(pady=20, padx=60, fill="both", expand=True)
+        # Set background image
+        bg_image_path = "gui/images/wavy-background.jpg"
+        self.bg_image = customtkinter.CTkImage(dark_image=Image.open(bg_image_path), size=(750, 500))
+        self.bg_label = customtkinter.CTkLabel(self, image=self.bg_image, text="")
+        self.bg_label.place(relwidth=1, relheight=1)
 
-image_path = "gui/images/wizards-making-beats.png"
-image = customtkinter.CTkImage(dark_image=Image.open(image_path), size=(300, 300))
-image_label = customtkinter.CTkLabel(master=frame, image=image, text="")
-image_label.pack(pady=10, padx=10)
+        # Main frame
+        self.frame = customtkinter.CTkFrame(self, fg_color="transparent")
+        self.frame.pack(pady=20, padx=60, fill="both", expand=True)
 
-label = customtkinter.CTkLabel(master=frame, text="DIABOLICAL MUSIC PROJECT", font=("Aptos", 24))
-label.pack(pady=10, padx=10)
+        # Logo Image
+        image_path = "gui/images/wizards-making-beats.png"
+        self.logo_image = customtkinter.CTkImage(dark_image=Image.open(image_path), size=(300, 300))
+        self.image_label = customtkinter.CTkLabel(self.frame, image=self.logo_image, text="")
+        self.image_label.pack(pady=10, padx=10)
 
-def cp_button_pressed():
-    print("cp_button is pressed")
-    generate_chord_progression("C_major_jazz", 5, "Jazzy-prog")
+        # Title Label
+        self.label = customtkinter.CTkLabel(self.frame, text="DIABOLICAL MUSIC PROJECT", font=("Aptos", 24))
+        self.label.pack(pady=10, padx=10)
 
-def pt_button_pressed():
-    print("pt_button is pressed")
+        # Buttons Frame
+        self.button_frame = customtkinter.CTkFrame(self.frame, fg_color="transparent")
+        self.button_frame.pack(pady=20, padx=60, fill="x", expand=True)
 
-def t_button_pressed():
-    print("t_button is pressed")
+        # Buttons
+        self.cp_button = customtkinter.CTkButton(self.button_frame, text="Chord progression generator", command=self.open_cp_page)
+        self.cp_button.pack(side="left", padx=20, expand=True)
 
-button_frame = customtkinter.CTkFrame(master=frame, fg_color="transparent")
-button_frame.pack(pady=20, padx=60, fill="x", expand=True)
+        self.pt_button = customtkinter.CTkButton(self.button_frame, text="Piano trainer", command=self.pt_button_pressed)
+        self.pt_button.pack(side="left", padx=20, expand=True)
 
-cp_button = customtkinter.CTkButton(master=button_frame, text="Chord progression generator", command=cp_button_pressed)
-cp_button.pack(side="left", padx=20, expand=True) 
+        self.t_button = customtkinter.CTkButton(self.button_frame, text="Tuner", command=self.t_button_pressed)
+        self.t_button.pack(side="left", padx=20, expand=True)
 
-pt_button = customtkinter.CTkButton(master=button_frame, text="Piano trainer", command=pt_button_pressed)
-pt_button.pack(side="left", padx=20, expand=True)
+    def open_cp_page(self):
+        self.destroy()
+        from cp_page import CPPage
+        cp_window = CPPage()
+        cp_window.mainloop()
 
-t_button = customtkinter.CTkButton(master=button_frame, text="Tuner", command=t_button_pressed)
-t_button.pack(side="left", padx=20, expand=True)
+    def pt_button_pressed(self):
+        print("Piano Trainer is pressed")
 
-root.mainloop()
+    def t_button_pressed(self):
+        print("Tuner is pressed")
+
+if __name__ == "__main__":
+    app = MainPage()
+    app.mainloop()
