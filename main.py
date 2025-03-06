@@ -4,7 +4,7 @@ from chord_progression_generator_dir.mid_file_generator import generate_mid_file
 
 feature = "chord generator"
 
-key = "G_major"
+key = "A_minor_jazz"
 length = 5
 filename = "test-"
 
@@ -12,7 +12,6 @@ def main():
     match feature:
         case "chord generator":
             progression = Progression(length, key)
-            print(progression.chords)
             generate_mid_file(progression, filename)
         case "piano chord trainer":
             print("Piano chord trainer NOT YET developed")

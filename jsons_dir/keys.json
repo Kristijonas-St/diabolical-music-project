@@ -34,5 +34,23 @@
         "V": "Bm",
         "VI": "C",
         "VII": "D"
+    },
+    "C_major_jazz": {
+        "I": "Cmaj7",
+        "II": "Dm7",
+        "III": "Em7",
+        "IV": "Fmaj7",
+        "V": "G7",
+        "VI": "Am7",
+        "VII": "Bø"
+    },
+    "A_minor_jazz": {
+        "I": "Am7",
+        "II": "Bø",
+        "III": "Cmaj7",
+        "IV": "Dm7",
+        "V": "E7",
+        "VI": "Fmaj7",
+        "VII": "G7"
     }
 }
