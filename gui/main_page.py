@@ -12,12 +12,6 @@ class MainPage(customtkinter.CTk):
         self.title("Diabolical Music Project")
         self.geometry("750x500")
 
-        # Set background image
-        bg_image_path = "gui/images/wavy-background.jpg"
-        self.bg_image = customtkinter.CTkImage(dark_image=Image.open(bg_image_path), size=(750, 500))
-        self.bg_label = customtkinter.CTkLabel(self, image=self.bg_image, text="")
-        self.bg_label.place(relwidth=1, relheight=1)
-
         # Main frame
         self.frame = customtkinter.CTkFrame(self, fg_color="transparent")
         self.frame.pack(pady=20, padx=60, fill="both", expand=True)
