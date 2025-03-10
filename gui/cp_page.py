@@ -1,8 +1,10 @@
 import customtkinter
+from tkinter import messagebox
 from PIL import Image
 import sys
 import json
 import re
+import os
 
 sys.path.append('./')
 from main import generate_chord_progression
@@ -54,32 +56,51 @@ class CPPage(customtkinter.CTk):
         selected_filename = self.file_name.get("1.0", "2.0").strip()
         selected_filepath = self.file_path.get("1.0", "2.0").strip()
         
-        self.check_inputs_validity(selected_key, selected_length, selected_filename, selected_filepath)
+        if not self.check_inputs_validity(selected_key, selected_length, selected_filename, selected_filepath):
+            print("We will not be able to create a file now")
+        else:
+            print("We WILL BE able to create a file")
+            generate_chord_progression(selected_key, int(selected_length), selected_filename, selected_filepath)
+            messagebox.showinfo("Success", f"MIDI file '{selected_filename}' was created successfully!")
+            self.clear_selections()
 
 
-        #generate_chord_progression(selected_key, int(selected_length), "generated_prog")
-        #print(f"Generating progression for {selected_key}, length: {selected_length}")
+
 
     def check_inputs_validity(self, selected_key, selected_length, selected_filename, selected_filepath):
         if not self.check_combo_boxes(selected_key, selected_length):
             print("invalid choice boxes")
+            return False
 
         if not self.check_text_boxes(selected_filename, selected_filepath):
             print("invalid text boxes")
+            return False
+        
+        return True
 
 
     def check_combo_boxes(self, selected_length, selected_key):
         if not selected_length or not selected_key:
             print("Please ensure that you've selected both key and lenght")
+            return False
         else:
-            print("Let's gooo")
+            print("Comboboxes OK") 
+            return True
+
+
 
     def check_text_boxes(self, selected_filename, selected_filepath):
-        self.check_filename(selected_filename)
+        if not self.check_filename(selected_filename):
+            print("Please pick a valid filename format")
+            return False
         
-    def check_filename(self, selected_filename):
-        selected_filename = "my awesome summer"
+        if not self.check_filepath(selected_filepath):
+            print("Please pick a valid filepath")
+            return False
         
+        return True
+        
+    def check_filename(self, selected_filename):        
         if len(selected_filename) > 50:
             print("Name too long!")
             return False
@@ -87,9 +108,29 @@ class CPPage(customtkinter.CTk):
             selected_filename = re.sub(r'[^a-zA-Z0-9\s.]', '', selected_filename)
             selected_filename = selected_filename.replace(" ", "-")
             selected_filename = selected_filename.replace(".", "")
+            print(selected_filename)
             return True
+        
+    def check_filepath(self, selected_filepath):
+        selected_filepath = os.path.expanduser(selected_filepath)
+
+        if os.path.exists(selected_filepath):
+            print("filepath EXISTS")
+            return True
+        else:
+            print("filepath DOESNT EXIST")
+            return False
 
 
+    def clear_selections(self):
+        self.key_option.set("")
+        self.length_option.set("")
+        
+        self.file_name.delete("1.0", "end")
+        self.file_path.delete("1.0", "end")
+        
+        self.file_name.insert("1.0", "Insert your desired file name (without whitespaces)")
+        self.file_path.insert("1.0", "Insert your desired file path (without whitespaces and dots)")
 
 
 
@@ -104,6 +145,7 @@ def get_keys_from_json():
     with open('jsons_dir/keys.json', 'r') as file:
         values = json.load(file)
         return list(values.keys())
+    
 
 if __name__ == "__main__":
     app = CPPage()
