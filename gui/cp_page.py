@@ -2,6 +2,7 @@ import customtkinter
 from PIL import Image
 import sys
 import json
+import re
 
 sys.path.append('./')
 from main import generate_chord_progression
@@ -74,9 +75,20 @@ class CPPage(customtkinter.CTk):
             print("Let's gooo")
 
     def check_text_boxes(self, selected_filename, selected_filepath):
-        #if len(selected_filename) > 50:
-            #print("too long")
-        pass
+        self.check_filename(selected_filename)
+        
+    def check_filename(self, selected_filename):
+        selected_filename = "my awesome summer"
+        
+        if len(selected_filename) > 50:
+            print("Name too long!")
+            return False
+        else:
+            selected_filename = re.sub(r'[^a-zA-Z0-9\s.]', '', selected_filename)
+            selected_filename = selected_filename.replace(" ", "-")
+            selected_filename = selected_filename.replace(".", "")
+            return True
+
 
 
 
