@@ -38,6 +38,7 @@ class CPPage(customtkinter.CTk):
 
         self.info = customtkinter.CTkTextbox(self, width=200, height=350)
         self.info.grid(row=1, column = 2, rowspan = 4, padx = 20, pady = 20)
+        self.info.configure(state="disabled")
 
         self.create_option = customtkinter.CTkButton(self, width=30, height=28, text="CREATE", fg_color="green", command=self.initiate_generation)
         self.create_option.grid(row=4, column=0, columnspan=2, padx=20, pady=10, sticky="")
@@ -49,16 +50,36 @@ class CPPage(customtkinter.CTk):
     def initiate_generation(self):
         selected_key = self.key_option.get()
         selected_length = self.length_option.get()
+        selected_filename = self.file_name.get("1.0", "2.0").strip()
+        selected_filepath = self.file_path.get("1.0", "2.0").strip()
+        
+        self.check_inputs_validity(selected_key, selected_length, selected_filename, selected_filepath)
 
+
+        #generate_chord_progression(selected_key, int(selected_length), "generated_prog")
+        #print(f"Generating progression for {selected_key}, length: {selected_length}")
+
+    def check_inputs_validity(self, selected_key, selected_length, selected_filename, selected_filepath):
+        if not self.check_combo_boxes(selected_key, selected_length):
+            print("invalid choice boxes")
+
+        if not self.check_text_boxes(selected_filename, selected_filepath):
+            print("invalid text boxes")
+
+
+    def check_combo_boxes(self, selected_length, selected_key):
         if not selected_length or not selected_key:
             print("Please ensure that you've selected both key and lenght")
         else:
             print("Let's gooo")
 
-        
+    def check_text_boxes(self, selected_filename, selected_filepath):
+        #if len(selected_filename) > 50:
+            #print("too long")
+        pass
 
-        #generate_chord_progression(selected_key, int(selected_length), "generated_prog")
-        #print(f"Generating progression for {selected_key}, length: {selected_length}")
+
+
 
     def go_back_to_main(self):
         """Redirects back to main page."""
