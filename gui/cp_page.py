@@ -12,6 +12,11 @@ from main import generate_chord_progression
 filename_prompt = "Insert your desired file name (without whitespaces)"
 filepath_prompt = "Insert your desired file path (without whitespaces and dots)"
 
+name_too_long_message = "Filename too long! Keep it under 50 characters."
+invalid_format_message = "Invalid filename format. Avoid special characters."
+invalid_path_message = "Invalid file path. Ensure the directory exists."
+empty_combo_message = "Please ensure that you've selected both key and length."
+
 class CPPage(customtkinter.CTk):
     def __init__(self):
         super().__init__()
@@ -44,6 +49,7 @@ class CPPage(customtkinter.CTk):
 
         self.info = customtkinter.CTkTextbox(self, width=200, height=350)
         self.info.grid(row=1, column=2, rowspan=4, padx=20, pady=20)
+        self.info.insert("0.0", "Feature not yet developed")
         self.info.configure(state="disabled")
 
         self.create_option = customtkinter.CTkButton(self, width=30, height=28, text="CREATE", fg_color="green", command=self.initiate_generation)
@@ -58,14 +64,16 @@ class CPPage(customtkinter.CTk):
         selected_filename = self.file_name.get("1.0", "end").strip()
         selected_filepath = self.file_path.get("1.0", "end").strip()
 
-
         if selected_key == "" and selected_length == "" and selected_filename == filename_prompt and selected_filepath == filepath_prompt:
             messagebox.showerror("Error", "Please fill in the necessary forms")
-        elif self.check_inputs_validity(selected_key, selected_length, selected_filename, selected_filepath):
-            print("Generating MIDI file...")
-            generate_chord_progression(selected_key, int(selected_length), selected_filename, selected_filepath)
-            messagebox.showinfo("Success", f"MIDI file '{selected_filename}' was created successfully!")
-            self.clear_selections()
+        else:
+            selected_filename, is_valid = self.check_inputs_validity(selected_key, selected_length, selected_filename, selected_filepath)
+            
+            if is_valid:
+                print("Generating MIDI file...")
+                generate_chord_progression(selected_key, int(selected_length), selected_filename, selected_filepath)
+                messagebox.showinfo("Success", f"MIDI file '{selected_filename}' was created successfully!")
+                self.clear_selections()
         
 
     def check_inputs_validity(self, selected_key, selected_length, selected_filename, selected_filepath):
@@ -75,9 +83,13 @@ class CPPage(customtkinter.CTk):
         if key_error:
             errors.append(key_error)
 
-        filename_error = self.check_filename(selected_filename)
-        if filename_error:
+        filename_error = self.check_filename(selected_filename) 
+        if filename_error == name_too_long_message or filename_error == invalid_format_message:
             errors.append(filename_error)
+        else:
+            print(filename_error)
+            selected_filename = filename_error
+            
 
         filepath_error = self.check_filepath(selected_filepath)
         if filepath_error:
@@ -86,30 +98,34 @@ class CPPage(customtkinter.CTk):
         for error in errors:
             messagebox.showerror("Error", error)
 
-        return len(errors) == 0
+        return selected_filename, len(errors) == 0
 
     def check_combo_boxes(self, selected_key, selected_length):
         if not selected_key or not selected_length:
-            return "Please ensure that you've selected both key and length."
+            return empty_combo_message
         return None
 
+
+
     def check_filename(self, selected_filename):
+
+        
         if len(selected_filename) > 50:
-            return "Filename too long! Keep it under 50 characters."
+            return name_too_long_message
 
         cleaned_filename = re.sub(r'[^a-zA-Z0-9\s.]', '', selected_filename)
         cleaned_filename = cleaned_filename.replace(" ", "-").replace(".", "")
 
         if not cleaned_filename:
-            return "Invalid filename format. Avoid special characters."
+            return invalid_format_message
 
-        return None
+        return cleaned_filename
 
     def check_filepath(self, selected_filepath):
         expanded_path = os.path.expanduser(selected_filepath)
 
         if not os.path.exists(expanded_path):
-            return "Invalid file path. Ensure the directory exists."
+            return invalid_path_message
 
         return None
 
