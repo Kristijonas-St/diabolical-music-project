@@ -11,10 +11,10 @@ def read_midi_middle_mappings():
         return json.load(file)
 
 
-def generate_mid_file(generated_progression, filename):
+def generate_mid_file(generated_progression, filename, filepath):
     
-    filename = filename + f"_in_{generated_progression.key.upper()}" + "_" + (str)(random.randint(1, 20)) + ".mid"
-    generated_mid_files_path = os.path.expanduser(f'~/Desktop/generated_five_chords/{filename}')
+    filename = filename + ".mid"
+    generated_mid_files_path = os.path.expanduser(os.path.join(filepath, filename))
     
     mid = MidiFile()
     track = MidiTrack()
