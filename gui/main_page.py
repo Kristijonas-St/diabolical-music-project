@@ -23,7 +23,7 @@ class MainPage(customtkinter.CTk):
         self.frame.pack(pady=20, padx=60, fill="both", expand=True)
 
         # Logo Image
-        image_path = "gui/images/wizards-making-beats.png"
+        image_path = "gui/images/piano-man.png"
         self.logo_image = customtkinter.CTkImage(dark_image=Image.open(image_path), size=(300, 300))
         self.image_label = customtkinter.CTkLabel(self.frame, image=self.logo_image, text="")
         self.image_label.pack(pady=10, padx=10)
